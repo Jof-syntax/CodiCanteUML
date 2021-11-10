@@ -14,9 +14,8 @@ classdef GliderMass < handle
             obj.init(cParams);
         end
         
-        function a = compute(obj)
-            obj.mass = obj.computeMass();
-            a = obj.mass;
+        function compute(obj)
+            obj.mass = obj.computeMass();        
         end
         
     end

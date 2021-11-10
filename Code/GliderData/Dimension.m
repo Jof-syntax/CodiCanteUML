@@ -14,9 +14,8 @@ classdef Dimension < handle
             obj.init(cParams);
         end
         
-        function a = compute(obj)
+        function compute(obj)
             obj.dim = obj.computeDim;
-            a = obj.dim;
         end 
         
     end

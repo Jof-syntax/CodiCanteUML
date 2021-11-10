@@ -1,4 +1,4 @@
-classdef GliderMaterial < handle %cambiar
+classdef GliderMaterial < handle
     
     properties (Access = public)
         mat
@@ -18,11 +18,9 @@ classdef GliderMaterial < handle %cambiar
             obj.create()
         end
         
-        function a = compute(obj)
+        function compute(obj)
             obj.mat = obj.computeMaterial;
             obj.tMat = obj.computeTMat;
-            a.mat = obj.mat;
-            a.tMat = obj.tMat;
         end
         
     end
