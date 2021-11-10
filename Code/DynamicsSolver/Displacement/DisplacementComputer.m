@@ -1,4 +1,4 @@
-classdef MatrixOperator < handle
+classdef DisplacementComputer < handle
     
     properties  (Access = public)
         displacement
@@ -19,7 +19,7 @@ classdef MatrixOperator < handle
     
     methods (Access = public)
         
-        function obj = MatrixOperator(cParams)
+        function obj = DisplacementComputer(cParams)
             obj.init(cParams);
         end
         
