@@ -20,7 +20,7 @@ classdef DisplacementComputer < handle
         
         function compute(obj)
             obj.computeDofSplitterComputer();
-            obj.computeSplitterMatrix();
+            obj.computeMatrixAndVectorSplitter();
             obj.computeSolver();
             obj.displacement = obj.computeDisplacementAssociation();
         end
@@ -35,13 +35,14 @@ classdef DisplacementComputer < handle
         
         function computeDofSplitterComputer(obj)
             s = obj.createDofSplitterComputer();
-            a = DofSplitterComputer(s);
-            obj.dofSplitted = a.compute();
+            a = DOFSplitterComputer(s);
+            a.compute();
+            obj.dofSplitted = a;
         end
         
-        function computeSplitterMatrix(obj)
-            s = obj.createSplitterMatrix();
-            a = SplitterMatrix(s);
+        function computeMatrixAndVectorSplitter(obj)
+            s = obj.createMatrixAndVectorSplitter();
+            a = MatrixAndVectorSplitter(s);
             a.compute();
             obj.KSplitted.KLL   = a.KLL;
             obj.KSplitted.KLR   = a.KLR;
@@ -79,9 +80,9 @@ classdef DisplacementComputer < handle
             s.fixNode = obj.data.fixNode;
         end
         
-        function s = createSplitterMatrix(obj)
+        function s = createMatrixAndVectorSplitter(obj)
             s.KG        = obj.data.KG;
-            s.forces    = obj.data.forces;
+            s.forces    = obj.data.fExt;
             s.vr        = obj.dofSplitted.vr;
             s.vl        = obj.dofSplitted.vl;
         end
