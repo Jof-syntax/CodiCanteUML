@@ -1,4 +1,4 @@
-classdef BeamsMatrixComputer < handle
+classdef StiffnessMatrixComputer < handle
     
     properties (Access = public)
         tD
@@ -11,7 +11,7 @@ classdef BeamsMatrixComputer < handle
     
     methods (Access = public)
         
-        function obj = BeamsMatrixComputer(cParams)
+        function obj = StiffnessMatrixComputer(cParams)
             obj.init(cParams);
         end
         
