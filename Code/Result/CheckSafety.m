@@ -22,18 +22,18 @@ classdef CheckSafety < handle
             obj.data = cParams;
         end
         
-        function safeBeam = computeSafety(obj)
-            sigcri = obj.data.criticStress;
-            sig = obj.data.stress;
+        function safety = computeSafety(obj)
+            criticStress = obj.data.criticStress;
+            stress = obj.data.stress;
             dim = obj.data.dim;
-            safeBeam = zeros(dim.nel, 2);
+            safety = zeros(dim.nel, 2);
             for e = 1:dim.nel
-                safeBeam(e,1) = e;
-                if sig(e)<0
-                    if sigcri(e) > abs(sig(e))
-                        safeBeam(e,2) = 0;
+                safety(e,1) = e;
+                if stress(e)<0
+                    if criticStress(e) > abs(stress(e))
+                        safety(e,2) = 0;
                     else
-                        safeBeam(e,2) = 1;
+                        safety(e,2) = 1;
                     end
                 end
             end
