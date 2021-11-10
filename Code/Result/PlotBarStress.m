@@ -34,7 +34,7 @@ classdef PlotBarStress < handle
             Xmapping = obj.mapping.Xmapping;
             Ymapping = obj.mapping.Ymapping;
             Zmapping = obj.mapping.Zmapping;
-            sig = obj.data.sig;
+            sig = obj.data.stress;
             patch(Xmapping, Ymapping, Zmapping,[sig';sig'],'edgecolor','flat','linewidth', 2);
         end
         
@@ -67,7 +67,7 @@ classdef PlotBarStress < handle
         end
         
         function computeCBar(obj)
-            sig = obj.data.sig;
+            sig = obj.data.stress;
             cbar = colorbar('Ticks',linspace(min(sig), max(sig), 5));
             title(cbar,{'Stress';'(Pa)'});
         end

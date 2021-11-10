@@ -49,10 +49,10 @@ classdef ResultComputer < handle
         end
         
         function s = createPlotBarStress(obj)
-            s.x     = obj.data.x;
-            s.tN    = obj.data.tN;
-            s.u     = obj.data.u;
-            s.sig   = obj.data.sig;
+            s.x                 = obj.data.x;
+            s.tN                = obj.data.tN;
+            s.displacement      = obj.data.displacement;
+            s.stress            = obj.data.stress;
         end
         
     end

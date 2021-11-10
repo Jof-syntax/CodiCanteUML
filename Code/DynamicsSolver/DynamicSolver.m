@@ -41,7 +41,7 @@ classdef DynamicSolver < handle
 
         function computeForces(obj)
             s = obj.createForcesComputer();
-            a = ExternalForcesComputer(s);
+            a = ForcesComputer(s);
             a.compute();
             obj.data.forces = a.forces;
         end
@@ -80,8 +80,8 @@ classdef DynamicSolver < handle
             s.pilotWeight   = obj.data.pilotWeight;
             s.g             = obj.data.g;
             s.mass          = obj.data.mass;
-            s.W             = obj.data.W;
-            s.H             = obj.data.H;
+            s.W             = obj.data.geometry.W;
+            s.H             = obj.data.geometry.H;
             s.gust          = obj.data.gust;
         end
 
