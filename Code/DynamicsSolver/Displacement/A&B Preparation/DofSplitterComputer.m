@@ -1,4 +1,4 @@
-classdef DofSplitterComputer < handle
+classdef DOFSplitterComputer < handle
     
     properties (Access = public)
         vr
@@ -12,7 +12,7 @@ classdef DofSplitterComputer < handle
     
     methods (Access = public)
         
-        function obj = DofSplitterComputer(cParams)
+        function obj = DOFSplitterComputer(cParams)
             obj.init(cParams);
         end
         
