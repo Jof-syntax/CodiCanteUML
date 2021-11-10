@@ -22,7 +22,7 @@ classdef ForcesComputer < handle
         
         function compute(obj)
             obj.computeForces();
-            obj.computeNodeForce();
+            obj.computeNodeForceComputer();
         end
         
     end
@@ -39,7 +39,7 @@ classdef ForcesComputer < handle
             obj.computeCG();
             obj.computeNotConservativeForces();
         end
-             
+        
         function computeConservativeForces(obj)
             s = obj.createConservativeForcesComputer();
             a = ConservativeForcesComputer(s);
@@ -63,6 +63,13 @@ classdef ForcesComputer < handle
             obj.Thrust  = a.Thrust;
         end
         
+        function computeNodeForceComputer(obj)
+            s = obj.createNodeForceComputer();
+            a = NodeForceComputer(s);
+            a.compute();
+            obj.forces = a.forces;
+        end
+        
         function s = createNotConservativeF(obj)
             s.data                    = obj.data;
             s.data.cg                 = obj.cg;
@@ -82,16 +89,12 @@ classdef ForcesComputer < handle
             s = obj.data;
         end
         
-        function computeNodeForceComputer(obj)
-            s = obj.createNodeForceComputer();
-            a = NodeForceComputer(s);
-            a.compute();
-            obj.forces = a.forces;
-        end
-                
         function s = createNodeForceComputer(obj)
-            s.gliderForces  = obj.gliderForces;
-            s.aceleration   = obj.aceleration;
+            s.g             = obj.data.g;
+            s.D             = obj.Drag;
+            s.L             = obj.Lift;
+            s.T             = obj.Thrust;
+            s.mass          = obj.data.mass;
             s.pilotWeight   = obj.data.pilotWeight;
             s.mat           = obj.data.mat;
             s.tMat          = obj.data.tMat;
