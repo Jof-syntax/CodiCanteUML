@@ -46,8 +46,9 @@ classdef GliderAnalyser < handle
             s = obj.createDynamicSolver();
             ds = DynamicSolver(s);
             ds.compute();
-            obj.dynamicSolver.stress = ds.stress;
-            obj.dynamicSolver.displacement = ds.displacement;
+            obj.dynamicSolver.stress        = ds.stress;
+            obj.dynamicSolver.criticStress  = ds.criticStress;
+            obj.dynamicSolver.displacement  = ds.displacement;
         end
         
         function computeResultComputer(obj)
@@ -87,10 +88,10 @@ classdef GliderAnalyser < handle
         function s = createResultComputer(obj)
             s.x             = obj.data.x;
             s.tN            = obj.data.tN;
-            s.u             = obj.data.u;
+            s.u             = obj.dynamicSolver.displacement;
             s.sig           = obj.data.sig;
-            s.criticStress  = obj.data.criticStress;
-            s.stress        = obj.data.stress;
+            s.criticStress  = obj.dynamicSolver.criticStress;
+            s.stress        = obj.dynamicSolver.stress;
             s.dim           = obj.data.dim;
         end
         
