@@ -82,7 +82,7 @@ classdef DisplacementComputer < handle
         
         function s = createMatrixAndVectorSplitter(obj)
             s.KG        = obj.data.KG;
-            s.forces    = obj.data.fExt;
+            s.forces    = obj.data.forces;
             s.vr        = obj.dofSplitted.vr;
             s.vl        = obj.dofSplitted.vl;
         end
@@ -94,7 +94,5 @@ classdef DisplacementComputer < handle
         end
         
     end
-    
-    
-end
 
+end
