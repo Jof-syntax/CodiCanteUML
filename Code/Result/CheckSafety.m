@@ -1,9 +1,5 @@
 classdef CheckSafety < handle
     
-    properties (Access = public)
-        Safety
-    end
-    
     properties (Access = private)
         data
     end
@@ -14,8 +10,8 @@ classdef CheckSafety < handle
             obj.init(cParams);
         end
 
-        function compute(obj)
-            obj.Safety = obj.computeSafety();
+        function Safety = compute(obj)
+            Safety = obj.computeSafety();
         end
         
     end
@@ -23,9 +19,7 @@ classdef CheckSafety < handle
     methods (Access = private)
         
         function init(obj, cParams)
-            obj.data.stress = cParams.stress;
-            obj.data.criticStress = cParams.criticStress;
-            obj.data.dim = cParams.dim;
+            obj.data = cParams;
         end
         
         function safeBeam = computeSafety(obj)
