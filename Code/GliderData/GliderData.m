@@ -16,7 +16,7 @@ classdef GliderData < handle
     
     methods (Access = private)
         
-        function init(obj)
+        function init(obj, cParams)
             obj.data = cParams;
         end
         
