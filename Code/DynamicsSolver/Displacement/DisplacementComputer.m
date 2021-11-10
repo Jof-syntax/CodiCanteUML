@@ -6,15 +6,10 @@ classdef DisplacementComputer < handle
     
     properties (Access = private)
         data
-        ur
-        ul
-        vl
-        vr
-        KLL
-        KLR
-        fExtL
-        A
-        B
+        unknownDisp
+        dofSplitted
+        KSplitted
+        FSplitted
     end
     
     methods (Access = public)
@@ -23,13 +18,11 @@ classdef DisplacementComputer < handle
             obj.init(cParams);
         end
         
-        function a = compute(obj)
+        function compute(obj)
             obj.computeDofSplitterComputer();
             obj.computeSplitterMatrix();
-            obj.computeAB();
             obj.computeSolver();
-            obj.computeDisplacementAssociation();
-            a.displacement = obj.displacement;
+            obj.displacement = obj.computeDisplacementAssociation();
         end
         
     end
@@ -43,40 +36,42 @@ classdef DisplacementComputer < handle
         function computeDofSplitterComputer(obj)
             s = obj.createDofSplitterComputer();
             a = DofSplitterComputer(s);
-            a.compute();
-            obj.vl = a.vl;
-            obj.ur = a.ur;
-            obj.vr = a.vr;
+            obj.dofSplitted = a.compute();
         end
         
         function computeSplitterMatrix(obj)
             s = obj.createSplitterMatrix();
             a = SplitterMatrix(s);
             a.compute();
-            obj.KLL = a.KLL;
-            obj.KLR = a.KLR;
-            obj.fExtL = a.fExtL;
-        end
-        
-        function computeAB(obj)
-            s = obj.createAB();
-            a = ABComputer(s);
-            a.compute();
-            obj.A = a.A;
-            obj.B = a.B;
+            obj.KSplitted.KLL   = a.KLL;
+            obj.KSplitted.KLR   = a.KLR;
+            obj.FSplitted.fExtL = a.fExtL;
         end
         
         function computeSolver(obj)
             s = obj.createSolver();
             a = Solver.create(s);
-            obj.ul = a.solution;
+            obj.unknownDisp = a.solution;
         end
         
-        function computeDisplacementAssociation(obj)
-            s = obj.createDisplacementAssociation();
-            a = NodeAndDisplacementAssociator(s);
-            a.compute();
-            obj.displacement = a.u;
+        function u = computeDisplacementAssociation(obj)
+            ul = obj.unknownDisp;
+            vl = obj.dofSplitted.vl;
+            vr = obj.dofSplitted.vr;
+            ur = obj.dofSplitted.ur;
+            u(vl,1) = ul;
+            u(vr,1) = ur;
+        end
+             
+        function B = computeB(obj)
+            fExtL   = obj.FSplitted.fExtL;
+            KLR     = obj.KSplitted.KLR;
+            ur      = obj.dofSplitted.ur;
+            B       = fExtL-KLR*ur;
+        end
+        
+         function A = computeA(obj)
+            A = obj.KSplitted.KLL;
         end
         
         function s = createDofSplitterComputer(obj)
@@ -85,32 +80,18 @@ classdef DisplacementComputer < handle
         end
         
         function s = createSplitterMatrix(obj)
-            s.KG   = obj.data.KG;
-            s.fExt = obj.data.fExt;
-            s.vr   = obj.vr;
-            s.vl   = obj.vl;
-        end
-        
-        function s = createAB(obj)
-            s.KLL   = obj.KLL;
-            s.fExtL = obj.fExtL;
-            s.KLR   = obj.KLR;
-            s.ur    = obj.ur;
+            s.KG        = obj.data.KG;
+            s.forces    = obj.data.forces;
+            s.vr        = obj.dofSplitted.vr;
+            s.vl        = obj.dofSplitted.vl;
         end
         
         function s = createSolver(obj)
-            s.A    = obj.A;
-            s.B    = obj.B;
+            s.A    = obj.computeA;
+            s.B    = obj.computeB;
             s.type = obj.data.type;
         end
         
-        function s = createDisplacementAssociation(obj)
-            s.ul = obj.ul;
-            s.vl = obj.vl;
-            s.vr = obj.vr;
-            s.ur = obj.ur;
-        end
-            
     end
     
     

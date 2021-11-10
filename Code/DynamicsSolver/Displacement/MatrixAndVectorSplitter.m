@@ -16,11 +16,8 @@ classdef MatrixAndVectorSplitter < handle
             obj.init(cParams);
         end
         
-        function a = compute(obj)
+        function compute(obj)
             obj.computeSplitter();
-            a.fExtL = obj.fExtL;
-            a.KLL = obj.KLL;
-            a.KLR = obj.KLR;
         end
         
     end
@@ -33,15 +30,15 @@ classdef MatrixAndVectorSplitter < handle
         
         function computeSplitter(obj)
             KG = obj.data.KG;
-            fExt = obj.data.fExt;
+            forces = obj.data.forces;
             vr = obj.data.vr;
             vl = obj.data.vl;
-            fExtL = fExt(vl,1);
+            fExtL = forces(vl,1);
             KLL = KG(vl,vl);
             KLR = KG(vl,vr);
-            obj.fExtL = fExtL;
-            obj.KLL = KLL;
-            obj.KLR = KLR;
+            obj.fExtL   = fExtL;
+            obj.KLL     = KLL;
+            obj.KLR     = KLR;
         end
         
     end

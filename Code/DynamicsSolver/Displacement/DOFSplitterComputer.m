@@ -16,11 +16,8 @@ classdef DOFSplitterComputer < handle
             obj.init(cParams);
         end
         
-        function a = compute(obj)
+        function  compute(obj)
             obj.computeDofSplitterComputer();
-            a.vr = obj.vr;
-            a.ur = obj.ur;
-            a.vl = obj.vl;
         end
         
     end
