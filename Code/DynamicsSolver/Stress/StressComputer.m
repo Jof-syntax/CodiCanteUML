@@ -33,7 +33,7 @@ classdef StressComputer < handle
             tMat    = obj.data.tMat;
             dim     = obj.data.dim;
             tD      = obj.data.tD;
-            u       = obj.data.u;
+            u       = obj.data.displacement;
             sig     = zeros(dim.nel,1);
             for iElem = 1:dim.nel
                 le = obj.computeLength(iElem);
