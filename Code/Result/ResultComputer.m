@@ -1,22 +1,60 @@
 classdef ResultComputer < handle
     
-    properties
-        Safety
+    properties (Access = public)
+        safety
     end
     
-    methods
+    properties (Access = private)
+        data
+    end
+    
+    methods (Access = public)
         
-        function obj = untitled(inputArg1,inputArg2)
-            %UNTITLED Construct an instance of this class
-            %   Detailed explanation goes here
-            obj.Property1 = inputArg1 + inputArg2;
+        function obj = ResultComputer(cParams)
+            obj.init(cParams);
         end
         
-        function outputArg = method1(obj,inputArg)
-            %METHOD1 Summary of this method goes here
-            %   Detailed explanation goes here
-            outputArg = obj.Property1 + inputArg;
+        function compute(obj)
+            obj.safety = obj.computeCheckSafety();
         end
+        
+        function plot(obj)
+            obj.computePlot();
+        end
+        
+    end
+    
+    methods (Access = private)
+        
+        function init(obj, cParams)
+            obj.data = cParams;
+        end
+        
+        function safety = computeCheckSafety(obj)
+            s = obj.createCheckSafety();
+            saf = CheckSafety(s);
+            safety = saf.compute();
+        end
+        
+        function computePlot(obj)
+            s = obj.createPlotBarStress();
+            p = PlotBarStress(s);
+            p.compute();
+        end
+        
+        function s = createCheckSafety(obj)
+            s.criticStress  = obj.data.criticStress;
+            s.stress        = obj.data.stress;
+            s.dim           = obj.data.dim;
+        end
+        
+        function s = createPlotBarStress(obj)
+            s.x     = obj.data.x;
+            s.tN    = obj.data.tN;
+            s.u     = obj.data.u;
+            s.sig   = obj.data.sig;
+        end
+        
     end
 end
 
