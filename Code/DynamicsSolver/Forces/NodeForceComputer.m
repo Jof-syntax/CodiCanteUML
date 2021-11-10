@@ -15,10 +15,10 @@ classdef NodeForceComputer < handle
         
         function obj = NodeForceComputer(cParams)
             obj.init(cParams);
-            
         end
         
         function compute(obj)
+            [obj.gliderForces, obj.aceleration] = obj.computeForceAndAcceleration();
             obj.fData = obj.computeGlobalForceDistribution();
             obj.forces = obj.computeForceClasification();
         end
@@ -29,6 +29,23 @@ classdef NodeForceComputer < handle
         
         function init(obj, cParams)
             obj.data = cParams;
+        end
+        
+        function [gliderForces, aceleration] = computeForceAndAcceleration(obj)
+            mass = obj.data.mass;
+            pilotWeight = obj.data.pilotWeight;
+            totalMass = mass + pilotWeight;
+            g = obj.data.g;
+            D = obj.data.D;
+            L = obj.data.L;
+            T = obj.data.T;
+            W = totalMass*g;
+            gliderForces(1) = W;
+            gliderForces(2) = D;
+            gliderForces(3) = L;
+            gliderForces(4) = T;
+            aceleration.X = (T - D) / totalMass;
+            aceleration.Z = (L - W) / totalMass;
         end
         
         function fData = computeGlobalForceDistribution(obj)
@@ -100,7 +117,7 @@ classdef NodeForceComputer < handle
             z1 = x(tN(iElem,1),3);
             z2 = x(tN(iElem,2),3);
         end
-
+        
     end
 end
 
