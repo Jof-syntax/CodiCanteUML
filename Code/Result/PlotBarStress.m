@@ -48,7 +48,7 @@ classdef PlotBarStress < handle
             scale = obj.scale;
             x = obj.data.x;
             tN = obj.data.tN;
-            u = obj.data.u;
+            u = obj.data.displacement;
             nd = size(x,2);
             ux = u(1:nd:end);
             uy = u(2:nd:end);

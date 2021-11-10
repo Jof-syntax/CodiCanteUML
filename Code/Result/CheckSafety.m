@@ -23,9 +23,9 @@ classdef CheckSafety < handle
         end
         
         function safety = computeSafety(obj)
-            criticStress = obj.data.criticStress;
-            stress = obj.data.stress;
-            dim = obj.data.dim;
+            criticStress    = obj.data.criticStress;
+            stress          = obj.data.stress;
+            dim             = obj.data.dim;
             safety = zeros(dim.nel, 2);
             for e = 1:dim.nel
                 safety(e,1) = e;
