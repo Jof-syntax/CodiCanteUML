@@ -9,7 +9,11 @@ classdef GliderData < handle
         function obj = GliderData(cParams)
             obj.init(cParams);
             obj.create();
-            obj.compute();
+        end
+        
+        function compute(obj)
+            obj.computeDimension();
+            obj.computeGliderMass();
         end
         
     end
@@ -24,11 +28,6 @@ classdef GliderData < handle
             obj.createGeometry();
             obj.createMaterials();
             obj.createExternalInfluence();
-        end
-        
-        function compute(obj)
-            obj.computeDimension();
-            obj.computeGliderMass();
         end
         
         function createGeometry(obj)
