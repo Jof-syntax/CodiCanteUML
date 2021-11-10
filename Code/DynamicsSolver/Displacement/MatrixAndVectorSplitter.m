@@ -1,4 +1,4 @@
-classdef SplitterMatrix < handle
+classdef MatrixAndVectorSplitter < handle
     
     properties (Access = public)
         fExtL
@@ -12,7 +12,7 @@ classdef SplitterMatrix < handle
     
     methods (Access = public)
         
-        function obj = SplitterMatrix(cParams)
+        function obj = MatrixAndVectorSplitter(cParams)
             obj.init(cParams);
         end
         

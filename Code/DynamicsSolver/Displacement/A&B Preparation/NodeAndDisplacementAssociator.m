@@ -1,4 +1,4 @@
-classdef NodeAndDisplacementAssociator < handle
+classdef NodeAndDisplacementAssociator < handle % es fara en displacement computer
     
     properties (Access = public)
         u
