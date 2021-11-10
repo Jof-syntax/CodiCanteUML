@@ -1,20 +1,14 @@
 classdef GliderAnalyser < handle
     
     properties (Access = public)
-        stress
-    end
-    
-    properties (Access = private)
-        gliderGeometry
-        gliderMaterial
-        externalInfluence
-        displacement
-        dim
-        tD
+        safety
     end
     
     properties (Access = private)
         cParams
+        data
+        result
+        dynamicSolver
     end
     
     methods (Access = public)
@@ -25,98 +19,79 @@ classdef GliderAnalyser < handle
         end
         
         function compute(obj)
-            obj.computeBeamDisplacement();
-            obj.computeSafeStressChecker();
+            obj.computeDynamicSolver();
+            obj.computeResultComputer();
         end
         
         function plot(obj)
-            s = createPlot(obj);
-            PlotBarStress(s);
+            obj.computePlot();
         end
         
     end
     
     methods (Access = private)
         
-        function create(obj)
-            obj.createGeometry();
-            obj.createMaterials();
-            obj.createExternalInfluence();
-        end
-        
-        function computeBeamDisplacement(obj)
-            s = obj.createBeamDisplacement();
-            b = BeamDisplacementComputer(s);
-            b.compute();
-            obj.displacement = b.displacement;
-            obj.tD = b.tD;
-            obj.dim = b.dim;
-        end
-        
         function init(obj, cParams)
             obj.cParams = cParams;
         end
         
-        function createGeometry(obj)
-            obj.gliderGeometry = GliderGeometry();
+        function create(obj)
+            s = obj.createGliderData();
+            d = GliderData(s);
+            d.compute();
+            obj.data = d.data;
         end
         
-        function createMaterials(obj)
-            s = createGliderMaterial(obj);
-            g = GliderMaterial(s);
-            g.compute();
-            obj.gliderMaterial = g;
+        function computeDynamicSolver(obj)
+            s = obj.createDynamicSolver();
+            ds = DynamicSolver(s);
+            ds.compute();
+            obj.dynamicSolver.stress = ds.stress;
+            obj.dynamicSolver.displacement = ds.displacement;
         end
         
-        
-        function computeSafeStressChecker(obj)
-            s = createStructreSafety(obj);
-            ss = StructreSafety(s);
-            ss.compute();
-            obj.stress.safeBeam = ss.stress.safeBeam;
-            obj.stress.sigCri   = ss.stress.sigCri;
-            obj.stress.sig      = ss.stress.sig;
+        function computeResultComputer(obj)
+            s = obj.createResultComputer();
+            r = ResultComputer(s);
+            r = r.compute();
+            obj.result = r;
+            obj.safety = r.safety;
         end
         
-        function createExternalInfluence(obj)
-            s = obj.cParams;
-            obj.externalInfluence = ExternalInfluence(s);
+        function computePlot(obj)
+            r = obj.result;
+            r.plot();
         end
         
-        function s  = createStructreSafety(obj)
-            s.x     = obj.gliderGeometry.x;
-            s.tN    = obj.gliderGeometry.tN;
-            s.mat   = obj.gliderMaterial.mat;
-            s.tMat  = obj.gliderMaterial.tMat;
-            s.dim   = obj.dim;
-            s.tD    = obj.tD;
-            s.u     = obj.displacement;
+        function s = createGliderData(obj)
+            s.gust         = obj.cParams.gust;
+            s.pilotWeight  = obj.cParams.pilotWeight;
         end
         
-        function s = createGliderMaterial(obj)
-            s.geometry  = obj.gliderGeometry.geometry;
-        end
-        
-        function s  = createPlot(obj)
-            s.x     = obj.gliderGeometry.x;
-            s.tN    = obj.gliderGeometry.tN;
-            s.sig   = obj.stress.sig;
-            s.u     = obj.displacement;
-        end
-        
-        function s = createBeamDisplacement(obj)
+        function s = createDynamicSolver(obj)
+            s.dim           = obj.data.dim;
+            s.mass          = obj.data.mass;
+            s.mat           = obj.data.mat;
+            s.tMat          = obj.data.tMat;
+            s.tN            = obj.data.tN;
+            s.x             = obj.data.x;
+            s.geometry      = obj.data.geometry;
+            s.fixNode       = obj.data.fixNode;
+            s.gust          = obj.data.gust;
+            s.g             = obj.data.g;
+            s.fExterior     = obj.data.fExterior;
+            s.pilotWeight   = obj.data.pilotWeight;
             s.type          = obj.cParams.type;
-            s.fixNode       = obj.gliderGeometry.fixNode;
-            s.fExterior     = obj.externalInfluence.fExterior;
-            s.mat           = obj.gliderMaterial.mat;
-            s.tMat          = obj.gliderMaterial.tMat;
-            s.g             = obj.externalInfluence.g;
-            s.x             = obj.gliderGeometry.x;
-            s.tN            = obj.gliderGeometry.tN;
-            s.pilotWeight   = obj.externalInfluence.pilotWeight;
-            s.W             = obj.gliderGeometry.geometry.W;
-            s.H             = obj.gliderGeometry.geometry.H;
-            s.gust          = obj.externalInfluence.gust;
+        end
+        
+        function s = createResultComputer(obj)
+            s.x             = obj.data.x;
+            s.tN            = obj.data.tN;
+            s.u             = obj.data.u;
+            s.sig           = obj.data.sig;
+            s.criticStress  = obj.data.criticStress;
+            s.stress        = obj.data.stress;
+            s.dim           = obj.data.dim;
         end
         
     end
